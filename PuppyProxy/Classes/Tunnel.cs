@@ -424,7 +424,10 @@ namespace PuppyProxy
                         if (data != null && data.Length > 0)
                         {
                             // Logging.Log(LoggingModule.Severity.Debug, "ClientReaderSync " + Source() + " to " + Destination() + " read " + data.Length + " bytes");
-                            ServerTcpClient.Client.Send(data);
+                            if (ServerTcpClient != null && ServerTcpClient.Client.Connected)
+                            {
+                                ServerTcpClient.Client.Send(data);
+                            }
                             data = null;
                         }
                         else
@@ -468,7 +471,10 @@ namespace PuppyProxy
                         if (data != null && data.Length > 0)
                         {
                             // Logging.Log(LoggingModule.Severity.Debug, "ServerReaderSync " + Destination() + " to " + Source() + " read " + data.Length + " bytes");
-                            ClientTcpClient.Client.Send(data);
+                            if (ClientTcpClient.Client != null && ClientTcpClient.Client.Connected)
+                            {
+                                ClientTcpClient.Client.Send(data);
+                            }
                             data = null;
                         }
                         else
@@ -511,7 +517,10 @@ namespace PuppyProxy
                     if (data != null && data.Length > 0)
                     {
                         // Logging.Log(LoggingModule.Severity.Debug, "ClientReaderAsync " + Source() + " to " + Destination() + " read " + data.Length + " bytes");
-                        ServerTcpClient.Client.Send(data);
+                        if (ServerTcpClient.Client != null && ServerTcpClient.Client.Connected)
+                        {
+                            ServerTcpClient.Client.Send(data);
+                        }
                         data = null;
                     }
 
@@ -546,7 +555,10 @@ namespace PuppyProxy
                     if (data != null && data.Length > 0)
                     {
                         // Logging.Log(LoggingModule.Severity.Debug, "ServerReaderAsync " + Destination() + " to " + Source() + " read " + data.Length + " bytes");
-                        ClientTcpClient.Client.Send(data);
+                        if (ClientTcpClient.Client != null && ClientTcpClient.Client.Connected)
+                        {
+                            ClientTcpClient.Client.Send(data);
+                        }
                         data = null;
                     }
 
@@ -571,12 +583,14 @@ namespace PuppyProxy
         private void ClientSend(byte[] data)
         {
             if (data == null || data.Length < 1) return;
+            if (ClientTcpClient.Client == null || !ClientTcpClient.Client.Connected) return;
             ClientTcpClient.Client.Send(data);
         }
 
         private void ServerSend(byte[] data)
         {
             if (data == null || data.Length < 1) return;
+            if (ServerTcpClient.Client == null || !ServerTcpClient.Client.Connected) return;
             ServerTcpClient.Client.Send(data);
         }
 
